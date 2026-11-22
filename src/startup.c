@@ -45,6 +45,8 @@ void Default_Handler(void)
     }
 }
 
+// alias defines another name for the function
+// weak makes the definition replaceable by another non-weak function with the same name
 void NMI_Handler(void) __attribute__((weak, alias("Default_Handler")));
 
 void HardFault_Handler(void) __attribute__((weak, alias("Default_Handler")));

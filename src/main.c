@@ -1,20 +1,22 @@
 #include <stdint.h>
-
-#define RCC_AHB1ENR (*(volatile uint32_t *)0x40023830)
-#define GPIOA_MODER (*(volatile uint32_t *)0x40020000)
-#define GPIOA_ODR   (*(volatile uint32_t *)0x40020014)
+#include "stm32f446.h"
+#include "clock.h"
 
 int main(void) {
 
+    // initialize clocks
+    clock_init();
+
+    // turns on clock for GPIOA
     RCC_AHB1ENR |= 1u;
-    // GPIOA_MODER &= ~(0x3u << 10);
-    // GPIOA_MODER |= (0x1u << 10);
+    // makes PA5 an output
     GPIOA_MODER = (((GPIOA_MODER) & ~(0x3u << 10)) | (0x1u << 10));
 
+    // runs forever
     for (;;) {
-        // runs forever
-        GPIOA_ODR ^= (0x1 << 5u);
-
+        // toggles LED2
+        GPIOA_ODR ^= (0x1u << 5);
+        // delay
         for (volatile uint32_t i = 0; i < 500000; i++) {}
     }
 }
